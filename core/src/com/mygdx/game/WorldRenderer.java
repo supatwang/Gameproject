@@ -18,6 +18,15 @@ public class WorldRenderer
 		this.batch = batch;
 		this.world = world; 
 	}
+	
+	public void render()
+	{
+		//batch = new SpriteBatch();
+		batch.begin();
+        Vector2 pos = world.cha.getPosition();
+        batch.draw(Asset.ChaImg, pos.x, pos.y,50,50);
+        batch.end();
+	}
 	public void Erender()
 	{
 		for(Enemy e : world.Enemy1 )
@@ -29,17 +38,22 @@ public class WorldRenderer
         	batch.end();
 		}
 	}
-	public void render()
-	{
-		//batch = new SpriteBatch();
-		batch.begin();
-        Vector2 pos = world.cha.getPosition();
-        batch.draw(Asset.ChaImg, pos.x, pos.y,50,50);
-        batch.end();
-	}
+	
 	public void renderBullet()
 	{
 		for(Bullet b : world.bullet)
+		{
+			//batch = new SpriteBatch();
+			batch.begin();
+	        Vector2 pos =b.getPosition();
+	        batch.draw(Asset.BulletImg, pos.x, pos.y,50,50);
+	        batch.end();
+		}
+	}
+	
+	public void renderEBullet()
+	{
+		for(EnemyBullet b : world.Ebullet)
 		{
 			//batch = new SpriteBatch();
 			batch.begin();

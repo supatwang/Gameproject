@@ -11,6 +11,7 @@ public class World
     Cha cha;
     ArrayList<Enemy> Enemy1;
     ArrayList<Bullet> bullet;
+    ArrayList<EnemyBullet> Ebullet;
     private ProjectGame projectGame;
     long timerB = TimeUtils.millis();
     long timerC = TimeUtils.millis();
@@ -23,10 +24,12 @@ public class World
         cha = new Cha(100,100);
         bullet = new ArrayList<Bullet>();
         Enemy1 = new ArrayList<Enemy>();
-        for(int i=0;i<55;i++)
+        Ebullet = new ArrayList<EnemyBullet>();
+        for(int i=0;i<15;i++)
         {
         	Enemy1.add(new Enemy((int)(Math.random()*1500),(int)(Math.random()*1500)));
         }
+        Enemy1.add(new Enemy(150,100));
     }
     
     void update() 
@@ -75,6 +78,14 @@ public class World
     			checkDelayCollision = false;
 			}
 		}
+		for(EnemyBullet e:Ebullet)
+    	{
+			if(checkCollision(cha.position.x, e.position.x,cha.position.y,e.position.y) && TimeUtils.millis() - timerC >3000)
+			{
+    			System.out.println("kuy" + i++);
+    			checkDelayCollision = false;
+			}
+		}
     }
 
     void updateBullet()
@@ -87,14 +98,26 @@ public class World
     			Removebullet.add(b);
     	}
     	bullet.removeAll(Removebullet);
-    	
-    	
     }
+    
     void updateEnemy()
     {
     	ArrayList<Enemy> RemoveE = new ArrayList<Enemy>();
+    	ArrayList<EnemyBullet> RemoveEB = new ArrayList<EnemyBullet>();
     	for(Enemy e: Enemy1)
     	{
+    		if(Math.random() >= 0.99)
+    		{
+    			Ebullet.add(new EnemyBullet(e.getPosition()));
+    		}
+    		for(EnemyBullet b:Ebullet)
+    		{
+    			b.Release();
+    			if(b.check==true)
+    				RemoveEB.add(b);
+    		}
+    		
+    		Ebullet.removeAll(RemoveEB);
     		for(Bullet b:bullet)
         	{
     			if(checkCollision(e.position.x, b.position.x,e.position.y,b.position.y))
@@ -103,20 +126,9 @@ public class World
     	}
     	Enemy1.removeAll(RemoveE);
     	
+    	
     }
-	/*private boolean checkDelay(boolean check,int delayTime) {
-		if(check==false)
-    	{
-    		timer = TimeUtils.millis();
-    		checkDelayBullet = true;
-    		
-    	}
-		if(TimeUtils.millis() - timer > delayTime)
-			return true;
-		else
-			return false;
-	}*/
-
+	
 	private boolean checkCollision(float x, float x2 ,float y, float y2) {
 		return Math.pow((x-x2),2)+Math.pow((y-y2),2) <= 1000;
 	}

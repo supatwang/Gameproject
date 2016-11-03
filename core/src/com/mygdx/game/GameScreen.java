@@ -29,6 +29,7 @@ public class GameScreen extends ScreenAdapter
          worldrenderer.render();
          worldrenderer.renderBullet();
          worldrenderer.Erender();	
+         worldrenderer.renderEBullet();
 	}
 	
 	
