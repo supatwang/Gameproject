@@ -15,26 +15,27 @@ public class Cha extends GameObject
     public static final int DIRECTION_LEFT = 4;
     public static final int DIRECTION_STILL = 0;
     public static final int SPEED = 10;
-  //  public int LIFE = 3; 
+    public int SLOW = 1;
+    public int LIFE = 3; 
     
 	 public void move(int dir) 
 	 { 
 	        switch(dir) {
 	        case DIRECTION_UP:
 	            if(position.y < 700)
-	        		position.y += SPEED;
+	        		position.y += SPEED/SLOW;
 	            break;
 	        case DIRECTION_RIGHT:
 	        	if(position.x < 700)
-	        		position.x += SPEED;
+	        		position.x += SPEED/SLOW;
 	            break;
 	        case DIRECTION_DOWN:
 	        	if(position.y > 0)
-	        		position.y -= SPEED;
+	        		position.y -= SPEED/SLOW;
 	            break;
 	        case DIRECTION_LEFT:
 	        	if(position.x > 0)
-	            	position.x -= SPEED;
+	            	position.x -= SPEED/SLOW;
 	            break;
 	        }
 	    }

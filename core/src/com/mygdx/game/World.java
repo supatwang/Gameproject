@@ -66,7 +66,12 @@ public class World
         if(Gdx.input.isKeyPressed(Keys.RIGHT)) {
         	cha.move(Cha.DIRECTION_RIGHT);
         }
-        if(Gdx.input.isKeyPressed(Keys.Z) && TimeUtils.millis() - timerB > 75) 
+        if(Gdx.input.isKeyPressed(Keys.Z)) {
+        	cha.SLOW = 2;
+        }
+        else
+        	cha.SLOW = 1;
+        if(Gdx.input.isKeyPressed(Keys.X) && TimeUtils.millis() - timerB > 75) 
         {       	
         	
         	bullet.add(new Bullet(cha.getPosition()));
@@ -78,7 +83,7 @@ public class World
 			{
     			System.out.println("kuy" + i++);
     			checkDelayCollision = false;
-    		//	cha.LIFE--;
+    			cha.LIFE--;
 			}
 		}
 		for(EnemyBullet e:Ebullet)
@@ -87,7 +92,7 @@ public class World
 			{
     			System.out.println("kuy" + i++);
     			checkDelayCollision = false;
-    	//		cha.LIFE--;
+    			cha.LIFE--;
 			}
 		}
     }
@@ -105,8 +110,10 @@ public class World
     	bullet.removeAll(Removebullet);
     	for(EnemyBullet b:Ebullet)
 		{
-			b.Release();
-			//b.Release(++j%3);
+			if(score < 20)
+				b.Release(2);
+			else
+				b.Release(++j%3);
 			if(b.check==true)
 				RemoveEB.add(b);
 		}
@@ -122,7 +129,14 @@ public class World
     	{
     		if(Math.random() >= 0.99)
     		{
-    			Ebullet.add(new EnemyBullet(e.getPosition()));
+    			if(score < 20)
+    				Ebullet.add(new EnemyBullet(e.getPosition()));
+    			else
+    			{
+    				Ebullet.add(new EnemyBullet(e.getPosition()));
+    				Ebullet.add(new EnemyBullet(e.getPosition()));
+    				Ebullet.add(new EnemyBullet(e.getPosition()));
+    			}
     		}
     		
     		for(Bullet b:bullet)
@@ -136,8 +150,17 @@ public class World
         	}
     	}
     	Enemy1.removeAll(RemoveE);
+    	Ebullet.removeAll(RemoveEB);
     	
-    	
+    	/*if(score > 10)
+    	{
+    		for(Enemy e :Enemy1)
+    		{
+    			e.position.x += Math.random()*10;
+    			if(e.position.x >= 700)
+    				e.position.x = 0;
+    		}
+    	}*/
     }
 	
 	private boolean checkCollision(float x, float x2 ,float y, float y2) {

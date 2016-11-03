@@ -45,7 +45,8 @@ public class WorldRenderer
         
         batch.begin(); 
         showScore.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        showScore.draw(batch,world.textScore,800,700,100,100,true); 
+        showScore.draw(batch,world.textScore,800,700);
+        showScore.draw(batch,"LIFE : " + world.cha.LIFE,800,600);
         batch.end();
 	}
 	public void Erender()

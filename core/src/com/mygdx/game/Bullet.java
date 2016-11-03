@@ -18,7 +18,7 @@ public class Bullet
 	}
 	public void Release()
 	{
-		position.y += 50;
+		position.y += 25;
 		if(position.y > 1500)
 			check = true;
 	}
