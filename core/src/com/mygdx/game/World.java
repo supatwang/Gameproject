@@ -17,26 +17,28 @@ public class World
     long timerC = TimeUtils.millis();
     boolean checkDelayBullet = false;
     boolean checkDelayCollision = false;
-    int i=0;
+    public static int score = 0;
+    public String textScore = "SCORE : 0";
+    int j=0,i=0;
 
     World(ProjectGame projectGame) {
         this.projectGame = projectGame;
-        cha = new Cha(100,100);
+        cha = new Cha(500,100);
         bullet = new ArrayList<Bullet>();
         Enemy1 = new ArrayList<Enemy>();
         Ebullet = new ArrayList<EnemyBullet>();
-        for(int i=0;i<15;i++)
-        {
-        	Enemy1.add(new Enemy((int)(Math.random()*1500),(int)(Math.random()*1500)));
-        }
-        Enemy1.add(new Enemy(150,100));
     }
     
     void update() 
     {
+    	 if(Enemy1.size() < 10 )
+         {
+         	Enemy1.add(new Enemy((int)(Math.random()*700),600));
+         }
     	updateCha();
         updateBullet();
         updateEnemy();
+        
     }
     void updateCha()
     {
@@ -76,6 +78,7 @@ public class World
 			{
     			System.out.println("kuy" + i++);
     			checkDelayCollision = false;
+    		//	cha.LIFE--;
 			}
 		}
 		for(EnemyBullet e:Ebullet)
@@ -84,12 +87,14 @@ public class World
 			{
     			System.out.println("kuy" + i++);
     			checkDelayCollision = false;
+    	//		cha.LIFE--;
 			}
 		}
     }
 
     void updateBullet()
     {
+    	ArrayList<EnemyBullet> RemoveEB = new ArrayList<EnemyBullet>();
     	ArrayList<Bullet> Removebullet = new ArrayList<Bullet>();
     	for(Bullet b:bullet)
     	{
@@ -98,6 +103,15 @@ public class World
     			Removebullet.add(b);
     	}
     	bullet.removeAll(Removebullet);
+    	for(EnemyBullet b:Ebullet)
+		{
+			b.Release();
+			//b.Release(++j%3);
+			if(b.check==true)
+				RemoveEB.add(b);
+		}
+		
+		Ebullet.removeAll(RemoveEB);
     }
     
     void updateEnemy()
@@ -110,18 +124,15 @@ public class World
     		{
     			Ebullet.add(new EnemyBullet(e.getPosition()));
     		}
-    		for(EnemyBullet b:Ebullet)
-    		{
-    			b.Release();
-    			if(b.check==true)
-    				RemoveEB.add(b);
-    		}
     		
-    		Ebullet.removeAll(RemoveEB);
     		for(Bullet b:bullet)
         	{
     			if(checkCollision(e.position.x, b.position.x,e.position.y,b.position.y))
-        			RemoveE.add(e);
+    			{
+    				RemoveE.add(e);
+    				score++;
+    				textScore = "SCORE : " + score;
+    			}
         	}
     	}
     	Enemy1.removeAll(RemoveE);

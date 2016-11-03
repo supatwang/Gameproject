@@ -7,10 +7,10 @@ public class EnemyBullet extends Bullet {
 	public EnemyBullet(Vector2 x) {
 		super(x);
 	}
-	@Override
 	public void Release()
 	{
-		position.y -= 1;
+		//System.out.println(i);
+		position.y -= 10 + World.score/5;
 		if(position.y <= 0)
 			check = true;
 	}
