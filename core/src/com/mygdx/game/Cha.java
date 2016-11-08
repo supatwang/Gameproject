@@ -2,10 +2,8 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class Cha extends GameObject
-{
-	public Cha(int x, int y)
-	{
+public class Cha extends GameObject{
+	public Cha(int x, int y){
 		super(x, y);
 	}
 
@@ -18,8 +16,7 @@ public class Cha extends GameObject
     public int SLOW = 1;
     public int LIFE = 3; 
     
-	 public void move(int dir) 
-	 { 
+	 public void move(int dir){ 
 	        switch(dir) {
 	        case DIRECTION_UP:
 	            if(position.y < 700)

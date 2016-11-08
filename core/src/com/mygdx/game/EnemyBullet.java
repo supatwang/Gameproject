@@ -7,24 +7,23 @@ public class EnemyBullet extends Bullet {
 	public EnemyBullet(Vector2 x) {
 		super(x);
 	}
-	public void Release(int i)
-	{
+	public void Release(int i){
 		//System.out.println(i);
 		switch(i) {
         case 1:
-        	position.y -= 10 + World.score/20;
-        	position.x -= 10 + World.score/20;
+        	position.y -= 10;
+        	position.x -= 10;
             break;
         case 2:
-        	position.y -= 10 + World.score/20;
+        	position.y -= 10;
             break;
         case 0:
-        	position.y -= 10 + World.score/20;
-        	position.x += 10 + World.score/20;
+        	position.y -= 10;
+        	position.x += 10;
             break;
         }
 		
-		if(position.y <= 0)
-			check = true;
+		if(isOut())
+		check = true;
 	}
 }

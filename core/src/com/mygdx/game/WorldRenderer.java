@@ -7,52 +7,58 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-public class WorldRenderer 
-{
+public class WorldRenderer {
 	public SpriteBatch batch;
 	//private ProjectGame projectGame;
 	private World world;
 	public BitmapFont showScore;
 	
-	public WorldRenderer(SpriteBatch batch,World world, BitmapFont showScore)
-	{
+	public WorldRenderer(SpriteBatch batch,World world, BitmapFont showScore){
 		//this.projectGame=projectGame;
 		this.batch = batch;
 		this.world = world; 
 		this.showScore = showScore;
 	}
 	
-	public void render()
-	{
+	public void render(){
 		//batch = new SpriteBatch();
-		batch.begin();
-        Vector2 pos = world.cha.getPosition();
-        batch.draw(Asset.BgImg,0,0, 1000, 1000);
-        batch.end();
-        
-        if(world.checkDelayCollision == true)
-        {
-        	batch.begin();
-        	batch.draw(Asset.ChaImg, pos.x, pos.y,50,50);
-        	batch.end();
-        }
-        else	
-        {
-        	batch.begin();
-        	batch.draw(Asset.ChaHurtImg, pos.x, pos.y,50,50);
-        	batch.end();
-        }
-        
-        batch.begin(); 
+		renderBackground(); 
+        renderCha();
+        renderScore();
+        renderBullet();
+        Erender();
+        renderEBullet(); 
+	}
+
+	private void renderScore() {
+		batch.begin(); 
         showScore.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         showScore.draw(batch,world.textScore,800,700);
         showScore.draw(batch,"LIFE : " + world.cha.LIFE,800,600);
         batch.end();
 	}
-	public void Erender()
-	{
-		for(Enemy e : world.Enemy1 )
-		{	
+
+	private void renderCha() {
+		Vector2 pos = world.cha.getPosition();
+        if(world.checkDelayCollision == true){
+        	batch.begin();
+        	batch.draw(Asset.ChaImg, pos.x, pos.y,50,50);
+        	batch.end();
+        }
+        else{
+        	batch.begin();
+        	batch.draw(Asset.ChaHurtImg, pos.x, pos.y,50,50);
+        	batch.end();
+        }
+	}
+
+	private void renderBackground() {
+		batch.begin();
+        batch.draw(Asset.BgImg,0,0, 1000, 1000);
+        batch.end();
+	}
+	public void Erender(){
+		for(Enemy e : world.Enemy1 ){	
 			//batch = new SpriteBatch();
 			batch.begin();
         	Vector2 pos = e.getPosition();
@@ -63,8 +69,7 @@ public class WorldRenderer
 	
 	public void renderBullet()
 	{
-		for(Bullet b : world.bullet)
-		{
+		for(Bullet b : world.bullet){
 			//batch = new SpriteBatch();
 			batch.begin();
 	        Vector2 pos =b.getPosition();
@@ -73,10 +78,8 @@ public class WorldRenderer
 		}
 	}
 	
-	public void renderEBullet()
-	{
-		for(EnemyBullet b : world.Ebullet)
-		{
+	public void renderEBullet(){
+		for(EnemyBullet b : world.Ebullet){
 			//batch = new SpriteBatch();
 			batch.begin();
 	        Vector2 pos =b.getPosition();

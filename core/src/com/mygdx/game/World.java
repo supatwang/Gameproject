@@ -19,9 +19,9 @@ public class World
     boolean checkDelayCollision = false;
     public static int score = 0;
     public String textScore = "SCORE : 0";
-    int j=0,i=0;
+    //int j = 0,i = 0;
 
-    World(ProjectGame projectGame) {
+    World(ProjectGame projectGame){
         this.projectGame = projectGame;
         cha = new Cha(500,100);
         bullet = new ArrayList<Bullet>();
@@ -29,32 +29,81 @@ public class World
         Ebullet = new ArrayList<EnemyBullet>();
     }
     
-    void update() 
-    {
-    	 if(Enemy1.size() < 10 )
-         {
+    void update() {
+    	 /*if(Enemy1.size() < 10 ){
          	Enemy1.add(new Enemy((int)(Math.random()*700),600));
-         }
+         }*/
     	updateCha();
         updateBullet();
         updateEnemy();
-        
+        updatepattern();        
     }
-    void updateCha()
-    {
-    	if(checkDelayBullet==false)
-    	{
-    		timerB = TimeUtils.millis();
-    		checkDelayBullet = true;
-    		
-    	}
-    	if(checkDelayCollision==false)
-    	{
+    void updatepattern() {
+    	pattern1();
+	}
+
+	private void pattern1() {
+		if(Math.random() >= 0.95){
+			Enemy1.add(new Enemy(0,600));
+		}
+		for(Enemy e:Enemy1){
+			if(Math.random() >= 0.96){
+				Ebullet.add(new EnemyBullet(e.getPosition()));
+			}
+			e.position.x += 5;			
+		}
+		ArrayList<EnemyBullet> RemoveEB = new ArrayList<EnemyBullet>();
+		for(EnemyBullet b:Ebullet)
+		{
+			b.Release(2);
+			if(b.check==true)
+				RemoveEB.add(b);
+		}
+		
+		Ebullet.removeAll(RemoveEB);
+	}
+
+	void updateCha(){
+    	updateChaPosition();
+    	updateShoot();
+    	updateCollision();
+    }
+
+	private void updateCollision() {
+		if(checkDelayCollision==false){
     		timerC = TimeUtils.millis();
     		checkDelayCollision = true;
-    		
     	}
-    	if(Gdx.input.isKeyPressed(Keys.LEFT)) {
+		for(Enemy e:Enemy1){
+			if(checkCollision(cha.position.x, e.position.x,cha.position.y,e.position.y) && TimeUtils.millis() - timerC >3000){
+    			//System.out.println("kuy" + i++);
+    			checkDelayCollision = false;
+    			cha.LIFE--;
+			}
+		}
+		for(EnemyBullet e:Ebullet){
+			if(checkCollision(cha.position.x, e.position.x,cha.position.y,e.position.y) && TimeUtils.millis() - timerC >3000){
+    			//System.out.println("kuy" + i++);
+    			checkDelayCollision = false;
+    			cha.LIFE--;
+			}
+		}
+	}
+
+	private void updateShoot() {
+		if(checkDelayBullet==false){
+    		timerB = TimeUtils.millis();
+    		checkDelayBullet = true;
+    	}
+        if(Gdx.input.isKeyPressed(Keys.X) && TimeUtils.millis() - timerB > 75) {       	
+        	
+        	bullet.add(new Bullet(cha.getPosition()));
+        	checkDelayBullet= false;
+        }
+	}
+
+	private void updateChaPosition() {
+		if(Gdx.input.isKeyPressed(Keys.LEFT)) {
             cha.move(Cha.DIRECTION_LEFT);
         }
         if(Gdx.input.isKeyPressed(Keys.UP)) {
@@ -71,104 +120,39 @@ public class World
         }
         else
         	cha.SLOW = 1;
-        if(Gdx.input.isKeyPressed(Keys.X) && TimeUtils.millis() - timerB > 75) 
-        {       	
-        	
-        	bullet.add(new Bullet(cha.getPosition()));
-        	checkDelayBullet= false;
-        }
-		for(Enemy e:Enemy1)
-    	{
-			if(checkCollision(cha.position.x, e.position.x,cha.position.y,e.position.y) && TimeUtils.millis() - timerC >3000)
-			{
-    			System.out.println("kuy" + i++);
-    			checkDelayCollision = false;
-    			cha.LIFE--;
-			}
-		}
-		for(EnemyBullet e:Ebullet)
-    	{
-			if(checkCollision(cha.position.x, e.position.x,cha.position.y,e.position.y) && TimeUtils.millis() - timerC >3000)
-			{
-    			System.out.println("kuy" + i++);
-    			checkDelayCollision = false;
-    			cha.LIFE--;
-			}
-		}
-    }
+	}
 
-    void updateBullet()
-    {
-    	ArrayList<EnemyBullet> RemoveEB = new ArrayList<EnemyBullet>();
+    void updateBullet(){
     	ArrayList<Bullet> Removebullet = new ArrayList<Bullet>();
-    	for(Bullet b:bullet)
-    	{
+    	for(Bullet b:bullet){
     		b.Release();
     		if(b.check==true)
     			Removebullet.add(b);
     	}
     	bullet.removeAll(Removebullet);
-    	for(EnemyBullet b:Ebullet)
-		{
-			if(score < 20)
-				b.Release(2);
-			else
-				b.Release(++j%3);
-			if(b.check==true)
-				RemoveEB.add(b);
-		}
-		
-		Ebullet.removeAll(RemoveEB);
     }
     
-    void updateEnemy()
-    {
+    void updateEnemy(){
     	ArrayList<Enemy> RemoveE = new ArrayList<Enemy>();
-    	ArrayList<EnemyBullet> RemoveEB = new ArrayList<EnemyBullet>();
-    	for(Enemy e: Enemy1)
-    	{
-    		if(Math.random() >= 0.99)
-    		{
-    			if(score < 20)
-    				Ebullet.add(new EnemyBullet(e.getPosition()));
-    			else
-    			{
-    				Ebullet.add(new EnemyBullet(e.getPosition()));
-    				Ebullet.add(new EnemyBullet(e.getPosition()));
-    				Ebullet.add(new EnemyBullet(e.getPosition()));
-    			}
-    		}
-    		
-    		for(Bullet b:bullet)
-        	{
-    			if(checkCollision(e.position.x, b.position.x,e.position.y,b.position.y))
-    			{
+    	for(Enemy e: Enemy1){
+    		for(Bullet b:bullet){
+    			if(checkCollision(e.position.x, b.position.x,e.position.y,b.position.y)){
     				RemoveE.add(e);
     				score++;
     				textScore = "SCORE : " + score;
     			}
+    			if(b.isOut())
+    				RemoveE.add(e);
         	}
     	}
     	Enemy1.removeAll(RemoveE);
-    	Ebullet.removeAll(RemoveEB);
-    	
-    	/*if(score > 10)
-    	{
-    		for(Enemy e :Enemy1)
-    		{
-    			e.position.x += Math.random()*10;
-    			if(e.position.x >= 700)
-    				e.position.x = 0;
-    		}
-    	}*/
     }
 	
 	private boolean checkCollision(float x, float x2 ,float y, float y2) {
-		return Math.pow((x-x2),2)+Math.pow((y-y2),2) <= 1000;
+		return Math.pow((x - x2),2) + Math.pow((y - y2),2) <= 1000;
 	}
     
-    Cha getCha() 
-    {
+    Cha getCha() {
         return cha;
     }
 }
