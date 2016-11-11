@@ -9,14 +9,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-public class ProjectGame extends Game
-{
+public class ProjectGame extends Game{
 	public SpriteBatch batch;
 	public BitmapFont showScore;
 	
 	@Override
-	public void create () 
-	{
+	public void create () {
 		showScore = new BitmapFont();
 		batch = new SpriteBatch();
 		Asset.load();
@@ -24,15 +22,12 @@ public class ProjectGame extends Game
 	}
 
 	@Override
-	public void render ()
-	{
+	public void render (){
         super.render();   		
 	}
 	
-	
 	@Override
-	public void dispose ()
-	{
+	public void dispose (){
 		batch.dispose();
 	}
 }

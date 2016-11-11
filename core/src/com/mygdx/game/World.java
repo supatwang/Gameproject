@@ -6,9 +6,9 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
-public class World
-{
+public class World{
     Cha cha;
+    ArrayList<GameObject> Obj;
     ArrayList<Enemy> Enemy1;
     ArrayList<Bullet> bullet;
     ArrayList<EnemyBullet> Ebullet;
@@ -27,17 +27,17 @@ public class World
         bullet = new ArrayList<Bullet>();
         Enemy1 = new ArrayList<Enemy>();
         Ebullet = new ArrayList<EnemyBullet>();
+        Obj = new ArrayList<GameObject>();
     }
     
     void update() {
-    	 /*if(Enemy1.size() < 10 ){
-         	Enemy1.add(new Enemy((int)(Math.random()*700),600));
-         }*/
     	updateCha();
         updateBullet();
         updateEnemy();
-        updatepattern();        
+        updatepattern();
+        Obj.add(new Enemy(0,600));
     }
+   
     void updatepattern() {
     	pattern1();
 	}
@@ -46,17 +46,16 @@ public class World
 		if(Math.random() >= 0.95){
 			Enemy1.add(new Enemy(0,600));
 		}
-		for(Enemy e:Enemy1){
+		for(Enemy e: Enemy1){
 			if(Math.random() >= 0.96){
-				Ebullet.add(new EnemyBullet(e.getPosition()));
+				Ebullet.add(new EnemyBullet(e.position.x,e.position.y));
 			}
 			e.position.x += 5;			
 		}
 		ArrayList<EnemyBullet> RemoveEB = new ArrayList<EnemyBullet>();
-		for(EnemyBullet b:Ebullet)
-		{
+		for(EnemyBullet b: Ebullet){
 			b.Release(2);
-			if(b.check==true)
+			if(b.check == true)
 				RemoveEB.add(b);
 		}
 		
@@ -70,18 +69,18 @@ public class World
     }
 
 	private void updateCollision() {
-		if(checkDelayCollision==false){
+		if(checkDelayCollision == false){
     		timerC = TimeUtils.millis();
     		checkDelayCollision = true;
     	}
-		for(Enemy e:Enemy1){
+		for(Enemy e: Enemy1){
 			if(checkCollision(cha.position.x, e.position.x,cha.position.y,e.position.y) && TimeUtils.millis() - timerC >3000){
     			//System.out.println("kuy" + i++);
     			checkDelayCollision = false;
     			cha.LIFE--;
 			}
 		}
-		for(EnemyBullet e:Ebullet){
+		for(EnemyBullet e: Ebullet){
 			if(checkCollision(cha.position.x, e.position.x,cha.position.y,e.position.y) && TimeUtils.millis() - timerC >3000){
     			//System.out.println("kuy" + i++);
     			checkDelayCollision = false;
@@ -91,14 +90,13 @@ public class World
 	}
 
 	private void updateShoot() {
-		if(checkDelayBullet==false){
+		if(checkDelayBullet == false){
     		timerB = TimeUtils.millis();
     		checkDelayBullet = true;
     	}
         if(Gdx.input.isKeyPressed(Keys.X) && TimeUtils.millis() - timerB > 75) {       	
-        	
-        	bullet.add(new Bullet(cha.getPosition()));
-        	checkDelayBullet= false;
+        	bullet.add(new Bullet(cha.position.x,cha.position.y));
+        	checkDelayBullet = false;
         }
 	}
 
@@ -124,9 +122,9 @@ public class World
 
     void updateBullet(){
     	ArrayList<Bullet> Removebullet = new ArrayList<Bullet>();
-    	for(Bullet b:bullet){
+    	for(Bullet b: bullet){
     		b.Release();
-    		if(b.check==true)
+    		if(b.check == true)
     			Removebullet.add(b);
     	}
     	bullet.removeAll(Removebullet);
@@ -135,7 +133,7 @@ public class World
     void updateEnemy(){
     	ArrayList<Enemy> RemoveE = new ArrayList<Enemy>();
     	for(Enemy e: Enemy1){
-    		for(Bullet b:bullet){
+    		for(Bullet b: bullet){
     			if(checkCollision(e.position.x, b.position.x,e.position.y,b.position.y)){
     				RemoveE.add(e);
     				score++;

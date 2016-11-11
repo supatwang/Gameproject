@@ -2,22 +2,17 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class Bullet
-{
-
-	public Vector2 position;
+public class Bullet extends GameObject{
+	//public Vector2 position;
 	public boolean check = false;
-	public Bullet (Vector2 x)
-	{
-		position = new Vector2(x);
+	public Bullet (float x,float y){
+		super(x,y);
 		position.x += 3;
 	}
-	public Vector2 getPosition() 
-	{
+	public Vector2 getPosition() {
 		return position;    
 	}
-	public void Release()
-	{
+	public void Release(){
 		position.y += 25;
 		if(isOut())
 			check = true;

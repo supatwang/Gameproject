@@ -9,6 +9,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
  
 public class GameScreen extends ScreenAdapter {
+
 	ProjectGame projectGame;
 	World world;
 	WorldRenderer worldrenderer;
@@ -16,7 +17,7 @@ public class GameScreen extends ScreenAdapter {
 	public GameScreen(ProjectGame projectGame) {
 		this.projectGame = projectGame;
 		world = new World(projectGame);
-		worldrenderer = new WorldRenderer(projectGame.batch, world,projectGame.showScore);
+		worldrenderer = new WorldRenderer(projectGame.batch, world, projectGame.showScore);
 	}
 	
 	@Override

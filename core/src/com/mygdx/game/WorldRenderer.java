@@ -9,25 +9,22 @@ import com.badlogic.gdx.math.Vector2;
 
 public class WorldRenderer {
 	public SpriteBatch batch;
-	//private ProjectGame projectGame;
 	private World world;
 	public BitmapFont showScore;
 	
 	public WorldRenderer(SpriteBatch batch,World world, BitmapFont showScore){
-		//this.projectGame=projectGame;
 		this.batch = batch;
 		this.world = world; 
 		this.showScore = showScore;
 	}
 	
 	public void render(){
-		//batch = new SpriteBatch();
 		renderBackground(); 
         renderCha();
         renderScore();
         renderBullet();
-        Erender();
-        renderEBullet(); 
+        Enemyrender();
+        renderEnemyBullet(); 
 	}
 
 	private void renderScore() {
@@ -54,36 +51,33 @@ public class WorldRenderer {
 
 	private void renderBackground() {
 		batch.begin();
-        batch.draw(Asset.BgImg,0,0, 1000, 1000);
+        batch.draw(Asset.BgImg,0,0,1000,1000);
         batch.end();
 	}
-	public void Erender(){
+	
+	public void Enemyrender(){
 		for(Enemy e : world.Enemy1 ){	
-			//batch = new SpriteBatch();
 			batch.begin();
         	Vector2 pos = e.getPosition();
-        	batch.draw(Asset.ChaImg, pos.x, pos.y,50,50);
+        	batch.draw(Asset.Enemy1, pos.x, pos.y,75,75);
         	batch.end();
 		}
 	}
 	
-	public void renderBullet()
-	{
+	public void renderBullet(){
 		for(Bullet b : world.bullet){
-			//batch = new SpriteBatch();
 			batch.begin();
-	        Vector2 pos =b.getPosition();
+	        Vector2 pos = b.getPosition();
 	        batch.draw(Asset.BulletImg, pos.x, pos.y,50,50);
 	        batch.end();
 		}
 	}
 	
-	public void renderEBullet(){
+	public void renderEnemyBullet(){
 		for(EnemyBullet b : world.Ebullet){
-			//batch = new SpriteBatch();
 			batch.begin();
-	        Vector2 pos =b.getPosition();
-	        batch.draw(Asset.BulletImg, pos.x, pos.y,50,50);
+	        Vector2 pos = b.getPosition();
+	        batch.draw(Asset.EnemyBullet, pos.x, pos.y,25,25);
 	        batch.end();
 		}
 	}
