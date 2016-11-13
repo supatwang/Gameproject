@@ -14,7 +14,7 @@ public class GameObject {
 	}
 	
 	public boolean isOut(){
-		if(position.y <= 0 || position.y > 1500 || position.x <= -10 || position.x > 2010)
+		if(position.y <= 0 || position.y > 1500 || position.x <= -10 || position.x > 800)
 			return true;
 		else 
 			return false;
