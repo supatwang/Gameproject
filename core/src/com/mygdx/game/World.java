@@ -17,11 +17,15 @@ public class World{
     private ProjectGame projectGame;
     long timeStampB = TimeUtils.millis();
     long timeStampC = TimeUtils.millis();
+    long timeStampD = TimeUtils.millis();
     boolean checkDelayBullet = false;
     boolean checkDelayCollision = false;
     boolean checkBoss = false;
+    boolean firstDelay = true;
     public static int score = 0;
     public String textScore = "SCORE : 0";
+	int isRightBorder = 1;
+	int bulletcase = 0;
     //int j = 0,i = 0;
 
     World(ProjectGame projectGame){
@@ -37,40 +41,117 @@ public class World{
         updateBullet();
         updateEnemy();
         updatepattern();
-       // System.out.println(Enemy1.get(0).LIFE);
     }
    
     void updatepattern() {
-    	if(score >= 20 && Enemy1.isEmpty()){  		
+    	if(score >= 2){  		
     		if(checkBoss == false){
+    			Enemy1.clear();
     			Ebullet.clear();
     			Enemy1.add(new Boss(400,650));
     		}
     		checkBoss = true;
-    		patternBoss();
+    		if(Enemy1.get(0).LIFE < 80 && Enemy1.get(0).LIFE > 20)
+    			patternBoss2();
+    		else if(Enemy1.get(0).LIFE <= 20)
+    			patternBoss(10,0.85);
+    		else
+    			patternBoss(8,0.95);
+    		System.out.println(Enemy1.get(0).LIFE);
     	}
     	else if(checkBoss == false){
     		pattern1();
     	}
 	}
 
-	private void patternBoss(){
-		
+    private void patternBoss2(){
+    	if(firstDelay){
+    		timeStampD = TimeUtils.millis();
+    		firstDelay = false;
+    	}
+    	if(TimeUtils.millis()-timeStampD < 2000)
+			return;
+		else{	
+			if(Ebullet.size() < 27){
+				moveBoss(16);
+				if(Math.random() >= 0.9){
+					Ebullet.add(new EnemyBullet(Enemy1.get(0).position.x,Enemy1.get(0).position.y));
+					Ebullet.add(new EnemyBullet(Enemy1.get(0).position.x,Enemy1.get(0).position.y));
+					Ebullet.add(new EnemyBullet(Enemy1.get(0).position.x,Enemy1.get(0).position.y));
+				}
+				for(EnemyBullet b: Ebullet){
+					b.Release(2,10,5);
+					if(b.position.y == 500)
+						b.position.y = 510;
+				}
+			}
+			else{
+				for(EnemyBullet b: Ebullet){
+					b.Release(++bulletcase %3,2,1);
+				}
+				if(Ebullet.get(0).position.y < 0)
+					Ebullet.clear();
+				/*for(EnemyBullet b: Ebullet){
+					if(b.position.y < 0)
+						RemoveBullet.add(b);
+				}
+				Ebullet.removeAll(RemoveBullet);*/
+			}
+		}
+    }
+    
+    private void patternBoss(int speed, double random){
+    	if(firstDelay){
+    		timeStampD = TimeUtils.millis();
+    		firstDelay = false;
+    	}
+    	if(TimeUtils.millis()-timeStampD < 2000)
+			return;
+		else{
+				moveBoss(speed);
+				shootBossBullet(random);
+		}
+	}
+
+	private void shootBossBullet(double random) {
+		if(Math.random() >= random){
+			Ebullet.add(new EnemyBullet(Enemy1.get(0).position.x,Enemy1.get(0).position.y));
+			Ebullet.add(new EnemyBullet(Enemy1.get(0).position.x,Enemy1.get(0).position.y));
+			Ebullet.add(new EnemyBullet(Enemy1.get(0).position.x,Enemy1.get(0).position.y));
+		}
+		for(EnemyBullet b: Ebullet){
+			b.Release(++bulletcase %3,10,5);
+		}
+	}
+	
+    private void moveBoss(int speed) {
+    	if(Enemy1.get(0).position.x >= 690 && Enemy1.get(0).position.x >= 700)
+    		isRightBorder = 2;
+    	if(Enemy1.get(0).position.x <= 10 && Enemy1.get(0).position.x >= 0)
+    		isRightBorder = 1;
+    	switch(isRightBorder){
+    	case 1:
+    		Enemy1.get(0).position.x += speed;
+    		break;
+    	case 2:
+    		Enemy1.get(0).position.x -= speed;
+    		break;
+    	}
+
 	}
 
 	private void pattern1() {
-		if(Math.random() >= 0.95 && score < 20){
+		if(Math.random() >= 0.95 && score < 2){
 			Enemy1.add(new Enemy(0,650));
 		}
 		for(Enemy e: Enemy1){
 			if(Math.random() >= 0.96){
 				Ebullet.add(new EnemyBullet(e.position.x,e.position.y));
 			}
-			e.position.x += 4;			
+			e.position.x += 5;			
 		}		
-		
 		for(EnemyBullet b: Ebullet){
-				b.Release(2);
+				b.Release(2,10,5);
 		}
 		
 		updateEbullet();
@@ -90,6 +171,7 @@ public class World{
     	updateShoot();
     	updateCollision();
     }
+	
 
 	private void updateCollision() {
 		if(checkDelayCollision == false){
@@ -97,20 +179,21 @@ public class World{
     		checkDelayCollision = true;
     	}
 		for(Enemy e: Enemy1){
-			if(checkCollision(cha.position.x, e.position.x,cha.position.y,e.position.y) && TimeUtils.millis() - timeStampC >3000){
+			if(checkCollision(cha.position.x, e.position.x,cha.position.y,e.position.y) && TimeUtils.millis() - timeStampC > 3000){
     			//System.out.println("kuy" + i++);
     			checkDelayCollision = false;
     			cha.LIFE--;
 			}
 		}
 		for(EnemyBullet e: Ebullet){
-			if(checkCollision(cha.position.x, e.position.x,cha.position.y,e.position.y) && TimeUtils.millis() - timeStampC >3000){
+			if(checkCollision(cha.position.x, e.position.x,cha.position.y,e.position.y) && TimeUtils.millis() - timeStampC > 3000){
     			//System.out.println("kuy" + i++);
     			checkDelayCollision = false;
     			cha.LIFE--;
 			}
 		}
 	}
+	
 
 	private void updateShoot() {
 		if(checkDelayBullet == false){
@@ -122,6 +205,7 @@ public class World{
         	checkDelayBullet = false;
         }
 	}
+	
 
 	private void updateChaPosition() {
 		if(Gdx.input.isKeyPressed(Keys.LEFT)) {
@@ -142,8 +226,9 @@ public class World{
         else
         	cha.SLOW = 1;
 	}
+	
 
-    void updateBullet(){   	
+    void updateBullet(){
     	for(Bullet b: bullet){
     		b.Release();
     		if(b.check == true)
@@ -152,6 +237,7 @@ public class World{
     	bullet.removeAll(RemoveBullet);
     }
     
+    
     void updateEnemy(){
     	for(Enemy e: Enemy1){
     		for(Bullet b: bullet){
@@ -159,8 +245,7 @@ public class World{
     				e.LIFE--;
     				RemoveBullet.add(b);
     				if(e.LIFE == 0){
-    					RemoveEnemy.add(e);
-    					
+    					RemoveEnemy.add(e);					
     					score++;
     					textScore = "SCORE : " + score;
     				}
@@ -173,10 +258,11 @@ public class World{
     	bullet.removeAll(RemoveBullet);
     }
 	
-	private boolean checkCollision(float x, float x2 ,float y, float y2) {
+	
+    private boolean checkCollision(float x, float x2 ,float y, float y2) {
 		return Math.pow((x - x2),2) + Math.pow((y - y2),2) <= 1000;
 	}
-    
+
     Cha getCha() {
         return cha;
     }

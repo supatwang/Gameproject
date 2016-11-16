@@ -4,7 +4,7 @@ public class Boss extends Enemy{
 	
 	public Boss(float x, float y) {
 		super(x, y);
-		LIFE += 200;
+		LIFE += 100;
 	}
 
 }
