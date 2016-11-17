@@ -81,7 +81,7 @@ public class World{
     	if(TimeUtils.millis()-timeStampD < 2000)
 			return;
 		else{	
-			if(Ebullet.size() < 60){
+			if(Ebullet.size() < 69){
 				moveBoss(16);
 				if(Math.random() >= 0.9){
 					Ebullet.add(new EnemyBullet(Enemy1.get(0).position.x,Enemy1.get(0).position.y));
@@ -131,7 +131,7 @@ public class World{
 	}
 	
     private void moveBoss(int speed) {
-    	if(Enemy1.get(0).position.x >= 690 && Enemy1.get(0).position.x >= 700)
+    	if(Enemy1.get(0).position.x >= 785 && Enemy1.get(0).position.x <= 800)
     		isRightBorder = 2;
     	if(Enemy1.get(0).position.x <= 10 && Enemy1.get(0).position.x >= 0)
     		isRightBorder = 1;

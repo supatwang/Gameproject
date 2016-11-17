@@ -14,7 +14,7 @@ public class Cha extends GameObject{
     public static final int DIRECTION_STILL = 0;
     public static final int SPEED = 10;
     public int SLOW = 1;
-    public int LIFE = 5; 
+    public int LIFE = 50; 
     
 	 public void move(int dir){ 
 	        switch(dir) {
