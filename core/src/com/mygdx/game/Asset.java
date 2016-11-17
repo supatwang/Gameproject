@@ -10,6 +10,9 @@ public class Asset {
 	public static Texture Enemy1;
 	public static Texture BgImg;
 	public static Texture EnemyBullet;
+	public static Texture bobo;
+	public static Texture tryAgain;
+	public static Texture winScreen;
 
 	public static void load() {
 		ChaImg = new Texture("Cha.png");
@@ -18,6 +21,9 @@ public class Asset {
 		EnemyBullet = new Texture("EBullet.png");
 		BgImg = new Texture("bg.png");
 		ChaHurtImg = new Texture("ChaHurt.png");
+		bobo = new Texture("bobo.png");
+		tryAgain = new Texture("tryAgain.png");
+		winScreen = new Texture("winScreen.png");
 	}
 
 }

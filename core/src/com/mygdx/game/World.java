@@ -26,10 +26,12 @@ public class World{
     public String textScore = "SCORE : 0";
 	int isRightBorder = 1;
 	int bulletcase = 0;
+	int state;
     //int j = 0,i = 0;
 
     World(ProjectGame projectGame){
         this.projectGame = projectGame;
+        this.state = 0;
         cha = new Cha(500,100);
         bullet = new ArrayList<Bullet>();
         Enemy1 = new ArrayList<Enemy>();
@@ -37,21 +39,27 @@ public class World{
     }
     
     void update() {
+    	updatestate();
     	updateCha();
         updateBullet();
         updateEnemy();
         updatepattern();
     }
    
-    void updatepattern() {
-    	if(score >= 2){  		
+    private void updatestate() {
+		if(cha.LIFE <= 0)
+			state = 1;
+	}
+
+	void updatepattern() {
+    	if(score >= 20){  		
     		if(checkBoss == false){
     			Enemy1.clear();
     			Ebullet.clear();
     			Enemy1.add(new Boss(400,650));
     		}
     		checkBoss = true;
-    		if(Enemy1.get(0).LIFE < 80 && Enemy1.get(0).LIFE > 20)
+    		if(Enemy1.get(0).LIFE < 80 && Enemy1.get(0).LIFE > 15)
     			patternBoss2();
     		else if(Enemy1.get(0).LIFE <= 20)
     			patternBoss(10,0.85);
@@ -62,6 +70,7 @@ public class World{
     	else if(checkBoss == false){
     		pattern1();
     	}
+    	
 	}
 
     private void patternBoss2(){
@@ -72,7 +81,7 @@ public class World{
     	if(TimeUtils.millis()-timeStampD < 2000)
 			return;
 		else{	
-			if(Ebullet.size() < 27){
+			if(Ebullet.size() < 60){
 				moveBoss(16);
 				if(Math.random() >= 0.9){
 					Ebullet.add(new EnemyBullet(Enemy1.get(0).position.x,Enemy1.get(0).position.y));
@@ -91,11 +100,6 @@ public class World{
 				}
 				if(Ebullet.get(0).position.y < 0)
 					Ebullet.clear();
-				/*for(EnemyBullet b: Ebullet){
-					if(b.position.y < 0)
-						RemoveBullet.add(b);
-				}
-				Ebullet.removeAll(RemoveBullet);*/
 			}
 		}
     }
@@ -111,6 +115,8 @@ public class World{
 				moveBoss(speed);
 				shootBossBullet(random);
 		}
+    	if(Enemy1.get(0).LIFE <= 5)
+    		state = 2;
 	}
 
 	private void shootBossBullet(double random) {
@@ -141,7 +147,7 @@ public class World{
 	}
 
 	private void pattern1() {
-		if(Math.random() >= 0.95 && score < 2){
+		if(Math.random() >= 0.95 && score < 20){
 			Enemy1.add(new Enemy(0,650));
 		}
 		for(Enemy e: Enemy1){
@@ -180,14 +186,12 @@ public class World{
     	}
 		for(Enemy e: Enemy1){
 			if(checkCollision(cha.position.x, e.position.x,cha.position.y,e.position.y) && TimeUtils.millis() - timeStampC > 3000){
-    			//System.out.println("kuy" + i++);
     			checkDelayCollision = false;
     			cha.LIFE--;
 			}
 		}
 		for(EnemyBullet e: Ebullet){
 			if(checkCollision(cha.position.x, e.position.x,cha.position.y,e.position.y) && TimeUtils.millis() - timeStampC > 3000){
-    			//System.out.println("kuy" + i++);
     			checkDelayCollision = false;
     			cha.LIFE--;
 			}
@@ -200,7 +204,8 @@ public class World{
     		timeStampB = TimeUtils.millis();
     		checkDelayBullet = true;
     	}
-        if(Gdx.input.isKeyPressed(Keys.Z) && TimeUtils.millis() - timeStampB > 75) {       	
+        long bulletSpeed = 100/cha.SLOW;
+		if(Gdx.input.isKeyPressed(Keys.Z) && (TimeUtils.millis() - timeStampB) > bulletSpeed) {       	
         	bullet.add(new Bullet(cha.position.x,cha.position.y));
         	checkDelayBullet = false;
         }

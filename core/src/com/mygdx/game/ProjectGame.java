@@ -21,10 +21,10 @@ public class ProjectGame extends Game{
 		setScreen(new GameScreen(this));
 	}
 
-	@Override
-	public void render (){
+	//@Override
+/*	public void render (){
         super.render();   		
-	}
+	}*/
 	
 	@Override
 	public void dispose (){

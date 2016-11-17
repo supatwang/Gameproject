@@ -30,8 +30,8 @@ public class WorldRenderer {
 	private void renderScore() {
 		batch.begin(); 
         showScore.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        showScore.draw(batch,world.textScore,800,700);
-        showScore.draw(batch,"LIFE : " + world.cha.LIFE,800,600);
+        showScore.draw(batch,world.textScore,900,700);
+        showScore.draw(batch,"LIFE : " + world.cha.LIFE,900,600);
         batch.end();
 	}
 
@@ -81,6 +81,19 @@ public class WorldRenderer {
 	        batch.end();
 		}
 	}
+	
+	public void renderRetryScreen(){
+			batch.begin();
+			batch.draw(Asset.tryAgain,0,0,500,500);
+			batch.draw(Asset.bobo,500,0,500,500);
+	        batch.end();
+	}
+	
+	public void renderWInScreen(){
+		batch.begin();
+		batch.draw(Asset.winScreen,100,0,900,700);
+        batch.end();
+}
 	
 	
 }

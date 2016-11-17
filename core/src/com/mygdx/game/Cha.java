@@ -19,11 +19,11 @@ public class Cha extends GameObject{
 	 public void move(int dir){ 
 	        switch(dir) {
 	        case DIRECTION_UP:
-	            if(position.y < 700)
+	            if(position.y < 650)
 	        		position.y += SPEED/SLOW;
 	            break;
 	        case DIRECTION_RIGHT:
-	        	if(position.x < 700)
+	        	if(position.x < 800)
 	        		position.x += SPEED/SLOW;
 	            break;
 	        case DIRECTION_DOWN:
