@@ -22,7 +22,7 @@ public class Asset {
 		BgImg = new Texture("bg.png");
 		ChaHurtImg = new Texture("ChaHurt.png");
 		bobo = new Texture("bobo.png");
-		tryAgain = new Texture("tryAgain.png");
+		tryAgain = new Texture("tryagain.png");
 		winScreen = new Texture("winScreen.png");
 	}
 
